@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <sstream>
+#include <algorithm>
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
@@ -10,7 +12,7 @@ int main() {
     std::cout << "$ ";
     std::string command;
     std::getline(std::cin, command);
-    std::string builtins[3] = {"type", "echo", "exit"};
+    std::vector<std::string> builtins = {"type", "echo", "exit"};
 
     if (!command.empty()) {
       std::string word;
@@ -28,10 +30,10 @@ int main() {
 
       else if (word == "type") {
         ss >> word;
-        if (std::find(builtins.begin(), builtins.end(), word != builtsin.end()) {
+        if (std::find(builtins.begin(), builtins.end(), word) != builtins.end()) {
             std::cout << word << " is a shell builtin\n";
         } else {
-          std::co9ut << worrd << ": not found";
+          std::cout << word << ": not found\n";
 
         }
 
