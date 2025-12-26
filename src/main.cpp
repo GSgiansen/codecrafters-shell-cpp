@@ -10,6 +10,7 @@ int main() {
   std::string command;
   std::getline(std::cin, command);
 
-  if (command) {
-    std::cout << command": command not found";
+  if (!command.empty()) {
+    std::cout << command << ": command not found\n";
   }
+}
