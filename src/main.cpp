@@ -63,6 +63,14 @@ void handle_pwd() {
 
 }
 
+void handle_cd(std::string newPath) {
+  try {
+    fs::current_path(newPath);
+  } catch(fs::filesystem_error const& e) {
+      std::cerr << "cd: " << newPath << ": No such file or directory";
+  }
+}
+
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
@@ -72,7 +80,7 @@ int main() {
     std::cout << "$ ";
     std::string command;
     std::getline(std::cin, command);
-    std::vector<std::string> const builtins = {"type", "echo", "exit", "pwd"};
+    std::vector<std::string> const builtins = {"type", "echo", "exit", "pwd", "cd"};
 
     if (!command.empty()) {
       std::string word;
@@ -90,6 +98,10 @@ int main() {
       }
       else if (word == "pwd") {
         handle_pwd();
+      }
+      else if (word == "cd") {
+        ss >> word;
+        handle_cd(word);
       }
       else {
         // try to execute with the programme
