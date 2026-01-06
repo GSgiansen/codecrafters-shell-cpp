@@ -30,8 +30,39 @@ std::string find_in_path(const std::string cmd) {
   }
   return "";
 
+}
+
+void handle_echo(std::stringstream& ss, std::string& word) {
+    while (ss >> word) {
+      std::cout << word << " ";
+    }
+    std::cout << "\n";
+}
+void handle_type(std::stringstream& ss, std::string& word, std::vector<std::string> builtins) {
+    ss >> word;
+    if (std::find(builtins.begin(), builtins.end(), word) != builtins.end()) {
+          std::cout << word << " is a shell builtin\n";
+    } 
+    else {
+      // scan through each directory that can be 
+      std::string full_path = find_in_path(word);
+
+      if (!full_path.empty()) {
+        std::cout << word << " is " << full_path << "\n";
+      }
+      else {
+        
+        std::cout << word << ": not found\n";
+      }
+    }
+}
+
+void handle_pwd() {
+  fs::path currentPath = fs::current_path();
+  std::cout << currentPath.string() << "\n";
 
 }
+
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
@@ -41,7 +72,7 @@ int main() {
     std::cout << "$ ";
     std::string command;
     std::getline(std::cin, command);
-    std::vector<std::string> builtins = {"type", "echo", "exit"};
+    std::vector<std::string> const builtins = {"type", "echo", "exit", "pwd"};
 
     if (!command.empty()) {
       std::string word;
@@ -51,30 +82,14 @@ int main() {
       if (word  == "exit") return 0;
 
       else if (word  == "echo") {
-        while (ss >> word) {
-          std::cout << word << " ";
-        }
-        std::cout << "\n";
+        handle_echo(ss, word);
       }
 
       else if (word == "type") {
-        ss >> word;
-        if (std::find(builtins.begin(), builtins.end(), word) != builtins.end()) {
-            std::cout << word << " is a shell builtin\n";
-        } 
-        else {
-          // scan through each directory that can be 
-          std::string full_path = find_in_path(word);
-
-          if (!full_path.empty()) {
-            std::cout << word << " is " << full_path << "\n";
-          }
-          else {
-            
-            std::cout << word << ": not found\n";
-          }
-        }
-
+        handle_type(ss, word, builtins);
+      }
+      else if (word == "pwd") {
+        handle_pwd();
       }
       else {
         // try to execute with the programme
