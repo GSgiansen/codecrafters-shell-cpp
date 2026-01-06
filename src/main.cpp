@@ -77,8 +77,28 @@ int main() {
 
       }
       else {
+        // try to execute with the programme
+        std::string full_path = find_in_path(word);
+        std::string executable  = word;
+        int argcount = 1;
 
-        std::cout << command << ": command not found\n";
+        if (!full_path.empty()) {
+          // found the right file, need to take the arguments
+          while (ss >> word) {
+             executable = executable + " " + word;
+             argcount += 1;
+          }
+          // std::cout << "Program was passed " << argcount << " args (including program name).\n";
+          int return_code = std::system(executable.c_str());
+
+          if (return_code != 0) {
+            std::cout << command << ": command not found\n";
+          }
+        }
+        else {
+            std::cout << command << ": command not found\n";
+
+        }
       }
     }
   }
