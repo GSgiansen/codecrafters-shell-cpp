@@ -67,7 +67,7 @@ void handle_cd(std::string newPath) {
   try {
     fs::current_path(newPath);
   } catch(fs::filesystem_error const& e) {
-      std::cerr << "cd: " << newPath << ": No such file or directory";
+      std::cerr << "cd: " << newPath << ": No such file or directory\n";
   }
 }
 
