@@ -44,7 +44,10 @@ std::vector<std::string> parseCommand(const std::string& command) {
     char c = command[i];
     if (c == '\'') {
       in_quotes = !in_quotes;
-    } else if (isspace(c) && !in_quotes) {
+    } else if (c == '"') {
+
+    }
+    else if (isspace(c) && !in_quotes) {
       if (!current_arg.empty()) {
         args.push_back(current_arg);
         current_arg.clear();
