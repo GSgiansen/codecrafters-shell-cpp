@@ -40,14 +40,15 @@ std::vector<std::string> parseCommand(const std::string& command) {
   std::vector<std::string> args;
   std::string current_arg;
   bool in_quotes = false;
+  bool in_double = false;
   for (size_t i = 0; i < command.length(); ++i) {
     char c = command[i];
-    if (c == '\'') {
+    if (c == '\'' && !in_double) {
       in_quotes = !in_quotes;
-    } else if (c == '"') {
-
+    } else if (c == '"' && !in_quotes) {
+      in_double = !in_double;
     }
-    else if (isspace(c) && !in_quotes) {
+    else if (isspace(c) && !in_quotes && !in_double) {
       if (!current_arg.empty()) {
         args.push_back(current_arg);
         current_arg.clear();
